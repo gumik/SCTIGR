@@ -8,40 +8,27 @@ namespace SCTIGR
 	{
 		public Profile ()
 		{
-			profile = new LinkedList<int[]>();
+			profile = new List<int[]>();
 		}
 		
 		public void AddSequence(string sequence, int begin)
 		{
 			if (begin < 0) // at the beggining
 			{
-				for (int i = -begin - 1; i >= 0; --i)
-				{
-					profile.AddFirst(new int[5]);
-				}
-				
+				profile.InsertRange(0, NewEmptyFragment(-begin));
 				begin = 0;
 			}
 			
 			if (begin + sequence.Length > profile.Count) // at the end
 			{
 				var count = begin + sequence.Length - profile.Count;
-				for (int i = 0; i < count; ++i)
-				{
-					profile.AddLast(new int[5]);
-				}
-			}
-			
-			var node = profile.First;
-			for (int i = 0; i < begin; ++i)
-			{
-				node = node.Next;
+				profile.AddRange(NewEmptyFragment(count));
 			}
 			
 			foreach (var c in sequence)
 			{
-				node.Value[CharToKey(c)]++;
-				node = node.Next;
+				profile[begin][CharToKey(c)]++;
+				++begin;
 			}
 		}
 				
@@ -78,8 +65,19 @@ namespace SCTIGR
 			default: throw new ArgumentOutOfRangeException(string.Format("{0} is not one of {{A, T, C, G, <space>}}", c));
 			}
 		}
+				
+		private int[][] NewEmptyFragment(int length)
+		{
+			var tab = new int[length][];
+			for (int i = 0; i < length; ++i)
+			{
+				tab[i] = new int[5];
+			}
+			
+			return tab;
+		}
 		
-		private LinkedList<int[]> profile;
+		private List<int[]> profile;
 	}
 	
 	
