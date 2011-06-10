@@ -5,8 +5,7 @@ namespace SCTIGR
 	{
 		public static void Main()
 		{
-			Console.WriteLine("Hello SCITGR!");
-			Console.ReadKey();
+			Test.Go();
 		}
 	}
 }
