@@ -63,6 +63,20 @@ namespace SCTIGR
 				}
 			}
 		}
+		
+		public static void ProfileTest()
+		{
+			var profile = new Profile();
+			
+			while (true)
+			{
+				var sequence = Console.ReadLine();
+				var begin = int.Parse(Console.ReadLine());
+				
+				profile.AddSequence(sequence, begin);
+				Console.WriteLine(profile);
+			}
+		}
 	}
 }
 

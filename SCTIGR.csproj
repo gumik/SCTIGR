@@ -37,6 +37,7 @@
     <Compile Include="Tigr.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Profile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

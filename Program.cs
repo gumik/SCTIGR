@@ -5,7 +5,8 @@ namespace SCTIGR
 	{
 		public static void Main()
 		{
-			Test.BigTest();
+			//Test.BigTest();
+			Test.ProfileTest();
 		}
 	}
 }
