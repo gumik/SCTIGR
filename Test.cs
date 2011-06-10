@@ -42,6 +42,27 @@ namespace SCTIGR
 //				}
 			}
 		}
+		
+		public static void BigTest()
+		{
+			var time = DateTime.Now;
+			var lastCount = 0;
+			var count = 25000 * 25000 * 1;
+			
+			for (int i = 0; i < count; ++i)
+			{
+				var diff = (DateTime.Now - time).TotalSeconds;
+				if (diff >= 2)
+				{
+					var perSec = (i - lastCount) / diff;
+					var remaining = (count - lastCount) / perSec;
+					Console.WriteLine(string.Format("{0} /s, {1} remaining", perSec, remaining));
+					
+					time = DateTime.Now;
+					lastCount = i;
+				}
+			}
+		}
 	}
 }
 

@@ -9,7 +9,6 @@ namespace SCTIGR
 		
 		public Tigr(int merLength, string[] sequences)
 		{
-//			this.sequences = new LinkedList<string>(sequences);
 			this.sequences = sequences;
 			this.merLength = merLength;
 		}
@@ -31,7 +30,10 @@ namespace SCTIGR
 		
 		#region public events
 		
-		
+		public event Action<string> PairwaiseComparisionSequence = delegate { };
+		public event Action<int, int> PairwaiseComparisionSubSeq = delegate { };
+		public event Action PairwaiseComparisionNewMer = delegate { };
+		public event Action<HashSet<int>> PairwaiseComparisionExistingMer = delegate { };
 		
 		#endregion
 		
@@ -47,22 +49,28 @@ namespace SCTIGR
 			int i = 0;
 			foreach (var sequence in sequences)
 			{
+				PairwaiseComparisionSequence(sequence);
 				probablyOverlap[i] = new Dictionary<int, int>();
 				
 				int begin = 0;				
 				while (begin + merLength <= sequence.Length)
 				{
 					var subseq = sequence.Substring(begin, merLength);
+					PairwaiseComparisionSubSeq(begin, merLength);
+					
 					HashSet<int> hashset;
 					if (!mers.TryGetValue(subseq, out hashset))
 					{
 						hashset = new HashSet<int>();
 						mers[subseq] = hashset;
+						PairwaiseComparisionNewMer();
+					}
+					else
+					{
+						PairwaiseComparisionExistingMer(hashset);
 					}
 					
 					hashset.Add(i);
-					
-					//probablyOverlap[i] = new Dictionary<int, int>();
 					
 					foreach (var seqIdx in hashset)
 					{
