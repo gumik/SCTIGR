@@ -39,9 +39,34 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="SmithWaterman.cs" />
+    <Compile Include="gtk-gui\generated.cs" />
+    <Compile Include="GUI\ProfileControl.cs" />
+    <Compile Include="gtk-gui\SCTIGR.ProfileControl.cs" />
+    <Compile Include="GUI\SequenceControl.cs" />
+    <Compile Include="gtk-gui\SCTIGR.SequenceControl.cs" />
+    <Compile Include="GUI\MainForm.cs" />
+    <Compile Include="gtk-gui\SCTIGR.MainForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gdk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="Mono.Posix" />
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>pango-sharp-2.0</Package>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GUI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="gtk-gui\gui.stetic">
+      <LogicalName>gui.stetic</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

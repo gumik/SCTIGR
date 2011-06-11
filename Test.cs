@@ -1,4 +1,6 @@
 using System;
+using Gtk;
+
 namespace SCTIGR
 {
 	public class Test
@@ -102,6 +104,15 @@ namespace SCTIGR
 			{
 				Console.Write(string.Format("({0},{1}) ", i.Item1, i.Item2));
 			}
+		}
+		
+		public static void Gui()
+		{
+			Application.Init();
+			
+			new MainForm().Visible = true;
+			
+			Application.Run();
 		}
 	}
 }
