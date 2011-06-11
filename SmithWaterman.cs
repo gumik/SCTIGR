@@ -11,8 +11,8 @@ namespace SCTIGR
 		{
 			MatchScore = 2;
 			MismatchScore = -1;
-			InsertionScore = -1;
-			DeletionScore = -1;
+			InsertionScore = -2;
+			DeletionScore = -2;
 			
 			this.profile = profile;
 			this.sequence = sequence;
@@ -78,9 +78,26 @@ namespace SCTIGR
 			var seq = new LinkedList<Tuple<int, int>>();
 			
 			var act = best;
+			var p = null as Tuple<int, int>;
 			while (act != null)
 			{
-				seq.AddFirst(act);
+				Tuple<int, int> toAdd;
+				
+				if (p != null && p.Item1 == act.Item1)
+				{
+					toAdd = new Tuple<int, int>(-1, act.Item2);
+				}
+				else if (p != null && p.Item2 == act.Item2)
+				{
+					toAdd = new Tuple<int, int>(act.Item1, -1);
+				}
+				else
+				{
+					toAdd = new Tuple<int, int>(act.Item1, act.Item2);
+				}
+				
+				seq.AddFirst(toAdd);
+				p = act;
 				act = prev[act.Item1, act.Item2];
 			}
 			

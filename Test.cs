@@ -5,42 +5,47 @@ namespace SCTIGR
 	{
 		public static void Go()
 		{
-			var sequence = Utils.RandomSequence(2500);
+			var sequence = Utils.RandomSequence(80);
 			Console.WriteLine(sequence);
 			
-			var shots = Utils.Shotgun(sequence, 25000, 100, 16);
+			var shots = Utils.Shotgun(sequence, 160, 10, 2);
 			Console.WriteLine(string.Format("Shots ({0}):", shots.Length));
-//			foreach (var shot in shots)
-//			{
-//				Console.WriteLine(shot);
-//			}
 			
-//			var shots = new [] 
-//			{
-//				"ATACTGACATCAG",
-//				"GGAGAAATAC",
-//				
-//			};
-			
-			var tigr = new Tigr(11, shots);
-			var mers = tigr.GetProbablyOverlap();
-//			
-//			Console.WriteLine(string.Format("Mers ({0}):", mers.Count));
-//			foreach (var mer in mers)
-//			{
-//				Console.WriteLine(mer);
-//			}
-			
-			for (int i = 0; i < mers.Length; ++i)
+			var tigr = new Tigr(4, 1, 3, 0.9f, shots);
+			tigr.AssemblyInit += AssemblyInit;
+			tigr.AssemblyCandidate += AssemblyCandidate;
+			tigr.AssemblyGoodAlignment += AssemblyGoodAlignment;
+			tigr.AssemblyGoodAlignmentAdded += AssemblyGoodAlignmentAdded;
+			tigr.Calculate();
+		}
+		
+		public static void AssemblyInit(string seq)
+		{
+			Console.WriteLine(string.Format("AssemblyInit: {0}", seq));
+			//Console.ReadKey();
+		}
+		
+		public static void AssemblyCandidate(string seq)
+		{
+			Console.WriteLine(string.Format("Candidate: {0}", seq));
+			//Console.ReadKey();
+		}
+		
+		public static void AssemblyGoodAlignment(int begin)
+		{
+			Console.WriteLine(string.Format("AssemblyGoodAlignment: {0}", begin));
+			//Console.ReadKey();
+		}
+		
+		public static void AssemblyGoodAlignmentAdded(Profile profile)
+		{
+			Console.WriteLine(string.Format("AssemblyGoodAlignmentAdded: \n{0}", profile));
+			for (var c = 0; c < profile.Length; ++c)
 			{
-				//Console.WriteLine(string.Format("{0}: ", shots[i]));
-				Console.WriteLine(string.Format("{0}: {1} ", i, mers[i].Count));
-				
-//				foreach (var key in mers[i].Keys)
-//				{
-//					Console.WriteLine(string.Format("\t{0} ({1})", shots[key], mers[i][key]));
-//				}
+				Console.Write(profile[c]);
 			}
+			Console.WriteLine();
+			//Console.ReadKey();
 		}
 		
 		public static void BigTest()
@@ -80,12 +85,15 @@ namespace SCTIGR
 		
 		public static void SM()
 		{
-			var sequence = "AC TGGCAT";
+			var sequence = "AC TGTTTT";
 			var profile = new Profile();
-			profile.AddSequence("TATCACTG", 0);
+			profile.AddSequence("GGGGACTG", 0);
 			
 			var sm = new SmithWaterman(profile, sequence);
-			//sm.InsertionScore = 0;
+			sm.InsertionScore = -2;
+			sm.DeletionScore = -2;
+			sm.MismatchScore = -1;
+			sm.MatchScore = 2;
 			sm.Calculate();
 			sm.PrintResult();
 			var seq = sm.GetBest();

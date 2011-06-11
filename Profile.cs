@@ -32,6 +32,11 @@ namespace SCTIGR
 			}
 		}
 		
+		public void InsertEmpty(int position)
+		{
+			profile.InsertRange(position, NewEmptyFragment(1));
+		}
+		
 		public float Score(int index, char c, float matchScore, float mismatchScore)
 		{
 			var key = CharToKey(c);

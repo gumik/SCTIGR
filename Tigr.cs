@@ -7,22 +7,20 @@ namespace SCTIGR
 	{
 		#region public methods
 		
-		public Tigr(int merLength, string[] sequences)
+		public Tigr(int merLength, int maxOverhang, int minOverlap, float minSimilarity, string[] sequences)
 		{
 			this.sequences = sequences;
 			this.merLength = merLength;
+			this.maxOverhang = maxOverhang;
+			this.minOverlap = minOverlap;
+			this.minSimilarity = minSimilarity;
 		}
 		
-//		public Tigr (int merLength)
-//		{
-//			sequences = new LinkedList<string>();
-//			this.merLength = merLength;
-//		}
-		
-//		public void AddSequence(string sequence)
-//		{
-//			sequences.AddLast(sequence);
-//		}
+		public void Calculate()
+		{
+			PairwaiseComparision();
+			Assembly();
+		}
 		
 		#endregion
 		
@@ -30,10 +28,16 @@ namespace SCTIGR
 		
 		#region public events
 		
+		public event Action PairwaiseComparisionBegin = delegate { };
 		public event Action<string> PairwaiseComparisionSequence = delegate { };
 		public event Action<int, int> PairwaiseComparisionSubSeq = delegate { };
 		public event Action PairwaiseComparisionNewMer = delegate { };
 		public event Action<HashSet<int>> PairwaiseComparisionExistingMer = delegate { };
+		
+		public event Action<string> AssemblyInit = delegate { };
+		public event Action<string> AssemblyCandidate = delegate { };
+		public event Action<int> AssemblyGoodAlignment = delegate { };
+		public event Action<Profile> AssemblyGoodAlignmentAdded = delegate { };
 		
 		#endregion
 		
@@ -43,6 +47,7 @@ namespace SCTIGR
 		
 		private void PairwaiseComparision()
 		{
+			PairwaiseComparisionBegin();	
 			mers = new Dictionary<string, HashSet<int>>();
 			probablyOverlap = new Dictionary<int, int>[sequences.Length];
 			
@@ -100,14 +105,197 @@ namespace SCTIGR
 			}
 		}
 		
+		private void Assembly()
+		{
+			profile = new Profile();
+			profile.AddSequence(sequences[0], 0);
+			
+			var lastSegment = 0;
+			var firstSegment = 0;
+			
+			AssemblyInit(sequences[0]);
+//			var queue = new Queue<int>();
+//			for (int i = 1; i < sequences.Length; ++i)
+//			{
+//				queue.Enqueue(i);
+//			}
+			
+//			while (queue.Count > 0)
+//			{
+			//var seq = queue.Dequeue();
+			int change = 0; // 0 - there was align, 1 - there wasn't align on last, 2 - there wasn't align at all
+			while (true)
+			{
+				int seq;
+				
+				if (change == 0)
+				{
+					seq = lastSegment;
+				}
+				else if (change == 1)
+				{
+					seq = firstSegment;
+				}
+				else 
+				{
+					break;
+				}
+				
+				var list = GetProbablyBest(seq);
+				if (list.Count == 0)
+				{
+					if (change == 0)
+					{
+						seq = firstSegment;
+						list = GetProbablyBest(seq);
+						if (list.Count == 0)
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+				
+				var wasAlign = false;
+				foreach (var probSeq in list)
+				{
+					AssemblyCandidate(sequences[probSeq]);
+					var sm = new SmithWaterman(profile, sequences[probSeq]);
+					sm.Calculate();
+					var alignment = sm.GetBest();
+					if (IsGoodAlignment(sequences[probSeq], alignment))
+					{
+						AssemblyGoodAlignment(alignment.First.Value.Item1 - alignment.First.Value.Item2);
+						var side = AddSequence(sequences[probSeq], alignment);
+						
+						if ((side & 1) != 0)
+						{
+							firstSegment = probSeq;
+						}
+						else if ((side & 2) != 0)
+						{
+							lastSegment = probSeq;
+							change = 0;
+						}
+						
+						RemoveSeq(probSeq);
+						AssemblyGoodAlignmentAdded(profile);
+						wasAlign = true;
+						break;
+					}
+				}
+				
+				if (!wasAlign)
+				{
+					change++;
+				}
+			}
+		}
+		
+		private IList<int> GetProbablyBest(int baseSeq)
+		{
+			var dict = probablyOverlap[baseSeq];			
+			var sortedList = new SortedList<float, int>();
+			var random = new Random();
+			
+			foreach (var element in dict)
+			{
+				if (element.Value > 0)
+				{
+					sortedList.Add(-element.Value - (float)(random.NextDouble() * 0.99), element.Key);
+				}
+			}
+			
+			return sortedList.Values;
+		}
+		
+		private bool IsGoodAlignment(string sequence, LinkedList<Tuple<int,int>> alignment)
+		{
+			var first = alignment.First.Value;
+			var last = alignment.Last.Value;
+			
+			var overhang = Math.Max(
+			                       Math.Min(first.Item1, first.Item2),
+			                       Math.Min(profile.Length - last.Item1 - 1, sequence.Length - last.Item2 - 1)
+			                       );
+			
+			var overlap = alignment.Count;
+			
+			var sameBits = 0;
+			foreach (var b in alignment)
+			{
+				if (b.Item1 == -1 || b.Item2 == -1) continue;				
+				if (profile[b.Item1] == sequence[b.Item2]) ++ sameBits;
+			}
+			
+			var similarity = (float)sameBits / alignment.Count;
+			
+			return (similarity >= minSimilarity)
+				&& (overlap >= minOverlap)
+				&& (overhang <= maxOverhang);
+		}
+		
+		/// <summary>
+		/// return 1/2 (bitmask) if profile was extended on left/right side
+		/// 0 otherwise
+		/// </summary>
+		private int AddSequence(string sequence, LinkedList<Tuple<int,int>> alignment)
+		{
+			var profileI = alignment.First.Value.Item1;
+			var seqI = alignment.First.Value.Item2;
+			
+			foreach (var align in alignment)
+			{
+				if (align.Item1 == -1)
+				{
+					++profileI;
+					profile.InsertEmpty(profileI + 1);
+				}
+				
+				if (align.Item2 == -1)
+				{
+					++seqI;
+					sequence.Insert(seqI, " ");
+				}
+			}
+			
+			var prevLength = profile.Length;
+			var p = alignment.First.Value.Item1;
+			var s = alignment.First.Value.Item2;
+			var begin = p - s;
+			profile.AddSequence(sequence, begin);
+			
+			var mask = 0;
+			if (begin < 0) mask |= 1;
+			if (profile.Length != prevLength) mask |= 2;	
+			return mask;
+		}
+		
+		private void RemoveSeq(int seq)
+		{
+			var dict = probablyOverlap[seq];
+			foreach (var key in dict.Keys)
+			{
+				probablyOverlap[key][seq] = 0;
+			}
+		}
+		
 		#endregion
 		
 		#region private fields
 		
 		private int merLength;
+		private int minOverlap;
+		private float minSimilarity;
+		private int maxOverhang;
+		//private int maxLocalErrors;
 		private string[] sequences;
 		private Dictionary<string, HashSet<int>> mers;
 		private Dictionary<int, int>[] probablyOverlap;
+		private Profile profile;
 		
 		#endregion
 		
@@ -121,7 +309,7 @@ namespace SCTIGR
 		
 		public Dictionary<int, int>[] GetProbablyOverlap()
 		{
-			PairwaiseComparision();
+			//PairwaiseComparision();
 			return probablyOverlap;
 		}
 		
