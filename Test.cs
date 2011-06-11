@@ -77,6 +77,24 @@ namespace SCTIGR
 				Console.WriteLine(profile);
 			}
 		}
+		
+		public static void SM()
+		{
+			var sequence = "AC TGGCAT";
+			var profile = new Profile();
+			profile.AddSequence("TATCACTG", 0);
+			
+			var sm = new SmithWaterman(profile, sequence);
+			//sm.InsertionScore = 0;
+			sm.Calculate();
+			sm.PrintResult();
+			var seq = sm.GetBest();
+			
+			foreach (var i in seq)
+			{
+				Console.Write(string.Format("({0},{1}) ", i.Item1, i.Item2));
+			}
+		}
 	}
 }
 

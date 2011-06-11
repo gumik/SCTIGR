@@ -38,6 +38,7 @@
     <Compile Include="Test.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Profile.cs" />
+    <Compile Include="SmithWaterman.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

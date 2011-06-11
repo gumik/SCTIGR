@@ -31,6 +31,39 @@ namespace SCTIGR
 				++begin;
 			}
 		}
+		
+		public float Score(int index, char c, float matchScore, float mismatchScore)
+		{
+			var key = CharToKey(c);
+			var score = 0f;
+			
+			foreach (var cc in profile[index])
+			{
+				score += (key == cc) ? matchScore : mismatchScore;
+			}
+			
+			return score;
+		}
+		
+		public char this[int i]
+		{
+			get
+			{
+				var best = 0;
+				var bestCount = profile[i][0];
+				
+				for (int j = 1; j < 5; ++j)
+				{
+					if (profile[i][j] > bestCount)
+					{
+						best = j;
+						bestCount = profile[i][j];
+					}
+				}
+				
+				return KeyToChar(best);
+			}
+		}
 				
 		public override string ToString ()
 		{
@@ -53,6 +86,8 @@ namespace SCTIGR
 			return sb.ToString();
 		}
 		
+		public int Length { get { return profile.Count; } }
+		
 		private int CharToKey(char c)
 		{
 			switch (c)
@@ -63,6 +98,19 @@ namespace SCTIGR
 			case 'G': return 3;
 			case ' ': return 4;
 			default: throw new ArgumentOutOfRangeException(string.Format("{0} is not one of {{A, T, C, G, <space>}}", c));
+			}
+		}
+		
+		private char KeyToChar(int key)
+		{
+			switch (key)
+			{
+			case 0: return 'A';
+			case 1: return 'T';
+			case 2: return 'C';
+			case 3: return 'G';
+			case 4: return ' ';
+			default: throw new ArgumentOutOfRangeException();
 			}
 		}
 				
