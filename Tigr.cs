@@ -260,7 +260,7 @@ namespace SCTIGR
 				if (align.Item2 == -1)
 				{
 					++seqI;
-					sequence.Insert(seqI, " ");
+					sequence.Insert(seqI, "-");
 				}
 			}
 			

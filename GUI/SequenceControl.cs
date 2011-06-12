@@ -50,8 +50,12 @@ namespace SCTIGR
 					sb.Append(string.Format(format, "FFFF88", c));
 					break;
 					
-				case ' ':
+				case '-':
 					sb.Append('-');
+					break;
+					
+				case ' ':
+					sb.Append(' ');
 					break;
 					
 				default:

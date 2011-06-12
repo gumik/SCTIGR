@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SCTIGR
 {
@@ -11,7 +12,6 @@ namespace SCTIGR
 		public ProfileControl ()
 		{
 			this.Build ();
-			sequences = new LinkedList<SequenceControl>();
 		}
 		
 		public Profile Profile
@@ -26,78 +26,99 @@ namespace SCTIGR
 		
 		private void SequenceAdded(string sequence, int begin)
 		{
-			//Monitor.Enter(_lock);
-			
+			Console.WriteLine(string.Format("{0} at {1}", sequence, begin));
 			if (begin < 0)
 			{
-				InsertEmpty(0, -begin);
+				InsertEmptyToAll(0, -begin);
 				begin = 0;
 			}
 			
 			var text = sequence.Clone() as string;
 			
 			foreach (var widget in vbox)
-			//foreach (var sequenceControl in sequences)
 			{
 				var sequenceControl = widget as SequenceControl;
 				if (sequenceControl == null) continue;
 				
 				if (sequenceControl.Text.Length < begin)
 				{
-					sequenceControl.Text = InsertEmpty(sequenceControl.Text.Length, begin - sequenceControl.Text.Length, sequenceControl.Text);
+					sequenceControl.Text += string.Concat(Enumerable.Repeat(' ', begin - sequenceControl.Text.Length));
 					sequenceControl.Text += text;
-					//Monitor.Exit(_lock);
+					return;
+				}
+				else if (sequence.Length + begin < sequenceControl.Text.Length - 2 
+				         && IsSpace(sequenceControl.Text, begin, sequence.Length))
+				{
+					var sb = new StringBuilder();
+					
+					sb.Append(sequenceControl.Text.Substring(0, begin));
+					sb.Append(sequence);
+					sb.Append(sequenceControl.Text.Substring(begin + sequence.Length));
+					
+					sequenceControl.Text = sb.ToString();
 					return;
 				}
 			}
 			
-			text = InsertEmpty(0, begin, text);
-			//var children = vbox.Children.Length;
+			if (begin > 0)
+			{
+				text = text.Insert(0, string.Concat(Enumerable.Repeat(' ', begin)));
+			}
 			var sc = new SequenceControl() { Text = text, Visible = true };
 			vbox.Add(sc);
-			//sequences.AddLast(sc);
-			
-			//Monitor.Exit(_lock);
 		}
 		
 		private void EmptyInserted(int position)
 		{
-			InsertEmpty(position, 1);
+			InsertEmptyToAll(position, 1);
 		}
 		
-		private void InsertEmpty(int position, int length)
+		private void InsertEmptyToAll(int position, int length)
 		{
-			var sb = new StringBuilder(length);
-			for (int i = 0; i < length; ++i)
-			{
-				sb.Append(' ');
-			}
-			var text = sb.ToString();
+			var textLine = string.Concat(Enumerable.Repeat('-', length));
+			var textEmpty = string.Concat(Enumerable.Repeat(' ', length));
 			
 			foreach (var widget in vbox.Children)
 			{
 				var sequence = widget as SequenceControl;
 				if (sequence == null) continue;
+				if (sequence.Text.Length < position) continue;
 				
-				sequence.Text = sequence.Text.Insert(position, text);
+				if (position > 0 && sequence.Text[position - 1] != ' ')
+				{
+					sequence.Text = sequence.Text.Insert(position, textLine);
+				}
+				else
+				{
+					sequence.Text = sequence.Text.Insert(position, textEmpty);
+				}
 			}
 		}
 		
-		private string InsertEmpty(int position, int length, string str)
+		private bool IsSpace(string sequence, int begin, int length)
 		{
-			var sb = new StringBuilder(length);
-			for (int i = 0; i < length; ++i)
+			for (int i = begin; i < begin + length; ++i)
 			{
-				sb.Append(' ');
+				if (sequence[i] != ' ')
+				{
+					return false;
+				}
 			}
-			var text = sb.ToString();
-			return str.Insert(position, text);
+			
+			if (begin > 0 && sequence[begin - 1] != ' ')
+			{
+				return false;
+			}
+			
+			if (sequence[begin + length] != ' ')
+			{
+				return false;
+			}
+			
+			return true;
 		}
 		
 		private Profile profile;
-		private LinkedList<SequenceControl> sequences;
-		//private bool added;
-		//private object _lock = new object();
 	}
 }
 

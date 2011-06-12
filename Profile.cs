@@ -77,7 +77,7 @@ namespace SCTIGR
 		public override string ToString ()
 		{
 			var sb = new StringBuilder();
-			var l =  new [] { 'A', 'T', 'C', 'G', ' ' };
+			var l =  new [] { 'A', 'T', 'C', 'G', '-' };
 			
 			for (int i = 0; i < 5; ++i)
 			{
@@ -108,8 +108,8 @@ namespace SCTIGR
 			case 'T': return 1;
 			case 'C': return 2;
 			case 'G': return 3;
-			case ' ': return 4;
-			default: throw new ArgumentOutOfRangeException(string.Format("{0} is not one of {{A, T, C, G, <space>}}", c));
+			case '-': return 4;
+			default: throw new ArgumentOutOfRangeException(string.Format("{0} is not one of {{A, T, C, G, -}}", c));
 			}
 		}
 		
@@ -121,7 +121,7 @@ namespace SCTIGR
 			case 1: return 'T';
 			case 2: return 'C';
 			case 3: return 'G';
-			case 4: return ' ';
+			case 4: return '-';
 			default: throw new ArgumentOutOfRangeException();
 			}
 		}

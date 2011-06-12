@@ -30,8 +30,8 @@ namespace SCTIGR
 				for (int j = 0; j < m; ++j)
 				{
 					var mm = score[i, j] + Score(profile[i], sequence[j]);
-					var del = score[i, j+1] + Score(profile[i], ' ');
-					var ins = score[i+1, j] + Score(' ', sequence[j]);
+					var del = score[i, j+1] + Score(profile[i], '-');
+					var ins = score[i+1, j] + Score('-', sequence[j]);
 					
 					score[i+1, j+1] = 0;
 					
@@ -120,8 +120,8 @@ namespace SCTIGR
 		private int Score(char a, char b)
 		{
 			if (a == b) return MatchScore;
-			if (a == ' ') return InsertionScore;
-			if (b == ' ') return DeletionScore;
+			if (a == '-') return InsertionScore;
+			if (b == '-') return DeletionScore;
 			return MismatchScore;
 		}
 		
