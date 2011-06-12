@@ -12,6 +12,7 @@ namespace SCTIGR
 		public ProfileControl ()
 		{
 			this.Build ();
+			mutex = new object();
 		}
 		
 		public Profile Profile
@@ -19,8 +20,22 @@ namespace SCTIGR
 			set 
 			{ 
 				this.profile = value;
-				profile.SequenceAdded += SequenceAdded;
-				profile.EmptyInserted += EmptyInserted;
+				
+				profile.SequenceAdded += (s, b) => Gtk.Application.Invoke(delegate 
+				{
+					lock (mutex)
+					{
+						SequenceAdded(s, b); 
+					}
+				});
+				
+				profile.EmptyInserted += (p) => Gtk.Application.Invoke(delegate 
+				{
+					lock (mutex)
+					{
+						EmptyInserted(p); 
+					}
+				});
 			}
 		}
 		
@@ -119,6 +134,7 @@ namespace SCTIGR
 		}
 		
 		private Profile profile;
+		private object mutex;
 	}
 }
 

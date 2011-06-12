@@ -4,7 +4,11 @@ namespace SCTIGR
 {
 	public partial class ProfileControl
 	{
+		private global::Gtk.VBox vbox2;
+
 		private global::Gtk.VBox vbox;
+
+		private global::Gtk.Alignment alignment1;
 
 		protected virtual void Build ()
 		{
@@ -13,9 +17,22 @@ namespace SCTIGR
 			global::Stetic.BinContainer.Attach (this);
 			this.Name = "SCTIGR.ProfileControl";
 			// Container child SCTIGR.ProfileControl.Gtk.Container+ContainerChild
+			this.vbox2 = new global::Gtk.VBox ();
+			this.vbox2.Name = "vbox2";
+			this.vbox2.Spacing = 6;
+			// Container child vbox2.Gtk.Box+BoxChild
 			this.vbox = new global::Gtk.VBox ();
 			this.vbox.Name = "vbox";
-			this.Add (this.vbox);
+			this.vbox2.Add (this.vbox);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.vbox]));
+			w1.Position = 0;
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.alignment1 = new global::Gtk.Alignment (1f, 1f, 1f, 1f);
+			this.alignment1.Name = "alignment1";
+			this.vbox2.Add (this.alignment1);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.alignment1]));
+			w2.Position = 1;
+			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
