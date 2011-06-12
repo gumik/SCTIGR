@@ -4,13 +4,33 @@ namespace SCTIGR
 {
 	public partial class MainForm
 	{
+		private global::Gtk.HBox hbox4;
+
 		private global::Gtk.VBox vbox1;
 
 		private global::Gtk.ScrolledWindow scrolledwindow2;
 
+		private global::Gtk.VBox vbox3;
+
 		private global::SCTIGR.ProfileControl profilecontrol1;
 
+		private global::SCTIGR.SequenceControl sequencecontrol2;
+
 		private global::Gtk.Button button1;
+
+		private global::Gtk.Table table1;
+
+		private global::Gtk.Label label2;
+
+		private global::Gtk.Label label3;
+
+		private global::Gtk.Label label4;
+
+		private global::Gtk.Label overhangLabel;
+
+		private global::Gtk.Label overlapLabel;
+
+		private global::Gtk.Label similarityLabel;
 
 		protected virtual void Build ()
 		{
@@ -20,6 +40,10 @@ namespace SCTIGR
 			this.Title = global::Mono.Unix.Catalog.GetString ("MainForm");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Container child SCTIGR.MainForm.Gtk.Container+ContainerChild
+			this.hbox4 = new global::Gtk.HBox ();
+			this.hbox4.Name = "hbox4";
+			this.hbox4.Spacing = 6;
+			// Container child hbox4.Gtk.Box+BoxChild
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			this.vbox1.Spacing = 6;
@@ -32,14 +56,33 @@ namespace SCTIGR
 			global::Gtk.Viewport w1 = new global::Gtk.Viewport ();
 			w1.ShadowType = ((global::Gtk.ShadowType)(0));
 			// Container child GtkViewport.Gtk.Container+ContainerChild
+			this.vbox3 = new global::Gtk.VBox ();
+			this.vbox3.Name = "vbox3";
+			this.vbox3.Spacing = 6;
+			// Container child vbox3.Gtk.Box+BoxChild
 			this.profilecontrol1 = new global::SCTIGR.ProfileControl ();
 			this.profilecontrol1.Events = ((global::Gdk.EventMask)(256));
 			this.profilecontrol1.Name = "profilecontrol1";
-			w1.Add (this.profilecontrol1);
+			this.vbox3.Add (this.profilecontrol1);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.profilecontrol1]));
+			w2.Position = 0;
+			w2.Expand = false;
+			w2.Fill = false;
+			// Container child vbox3.Gtk.Box+BoxChild
+			this.sequencecontrol2 = new global::SCTIGR.SequenceControl ();
+			this.sequencecontrol2.Events = ((global::Gdk.EventMask)(256));
+			this.sequencecontrol2.Name = "sequencecontrol2";
+			this.sequencecontrol2.Text = "";
+			this.vbox3.Add (this.sequencecontrol2);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.sequencecontrol2]));
+			w3.Position = 1;
+			w3.Expand = false;
+			w3.Fill = false;
+			w1.Add (this.vbox3);
 			this.scrolledwindow2.Add (w1);
 			this.vbox1.Add (this.scrolledwindow2);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));
-			w4.Position = 0;
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));
+			w6.Position = 0;
 			// Container child vbox1.Gtk.Box+BoxChild
 			this.button1 = new global::Gtk.Button ();
 			this.button1.CanFocus = true;
@@ -47,18 +90,94 @@ namespace SCTIGR
 			this.button1.UseUnderline = true;
 			this.button1.Label = global::Mono.Unix.Catalog.GetString ("GtkButton");
 			this.vbox1.Add (this.button1);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.button1]));
-			w5.Position = 1;
-			w5.Expand = false;
-			w5.Fill = false;
-			this.Add (this.vbox1);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.button1]));
+			w7.Position = 1;
+			w7.Expand = false;
+			w7.Fill = false;
+			this.hbox4.Add (this.vbox1);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.vbox1]));
+			w8.Position = 0;
+			// Container child hbox4.Gtk.Box+BoxChild
+			this.table1 = new global::Gtk.Table (((uint)(3)), ((uint)(2)), false);
+			this.table1.Name = "table1";
+			this.table1.RowSpacing = ((uint)(6));
+			this.table1.ColumnSpacing = ((uint)(6));
+			// Container child table1.Gtk.Table+TableChild
+			this.label2 = new global::Gtk.Label ();
+			this.label2.Name = "label2";
+			this.label2.Xalign = 1f;
+			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("overlap:");
+			this.label2.Justify = ((global::Gtk.Justification)(1));
+			this.table1.Add (this.label2);
+			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table1[this.label2]));
+			w9.XOptions = ((global::Gtk.AttachOptions)(4));
+			w9.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.label3 = new global::Gtk.Label ();
+			this.label3.Name = "label3";
+			this.label3.Xalign = 1f;
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("overhang:");
+			this.label3.Justify = ((global::Gtk.Justification)(1));
+			this.table1.Add (this.label3);
+			global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table1[this.label3]));
+			w10.TopAttach = ((uint)(1));
+			w10.BottomAttach = ((uint)(2));
+			w10.XOptions = ((global::Gtk.AttachOptions)(4));
+			w10.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.label4 = new global::Gtk.Label ();
+			this.label4.Name = "label4";
+			this.label4.Xalign = 1f;
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("similarity:");
+			this.label4.Justify = ((global::Gtk.Justification)(1));
+			this.table1.Add (this.label4);
+			global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.table1[this.label4]));
+			w11.TopAttach = ((uint)(2));
+			w11.BottomAttach = ((uint)(3));
+			w11.XOptions = ((global::Gtk.AttachOptions)(4));
+			w11.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.overhangLabel = new global::Gtk.Label ();
+			this.overhangLabel.Name = "overhangLabel";
+			this.table1.Add (this.overhangLabel);
+			global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.table1[this.overhangLabel]));
+			w12.TopAttach = ((uint)(1));
+			w12.BottomAttach = ((uint)(2));
+			w12.LeftAttach = ((uint)(1));
+			w12.RightAttach = ((uint)(2));
+			w12.XOptions = ((global::Gtk.AttachOptions)(4));
+			w12.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.overlapLabel = new global::Gtk.Label ();
+			this.overlapLabel.Name = "overlapLabel";
+			this.table1.Add (this.overlapLabel);
+			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.table1[this.overlapLabel]));
+			w13.LeftAttach = ((uint)(1));
+			w13.RightAttach = ((uint)(2));
+			w13.XOptions = ((global::Gtk.AttachOptions)(4));
+			w13.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.similarityLabel = new global::Gtk.Label ();
+			this.similarityLabel.Name = "similarityLabel";
+			this.table1.Add (this.similarityLabel);
+			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.table1[this.similarityLabel]));
+			w14.TopAttach = ((uint)(2));
+			w14.BottomAttach = ((uint)(3));
+			w14.LeftAttach = ((uint)(1));
+			w14.RightAttach = ((uint)(2));
+			w14.XOptions = ((global::Gtk.AttachOptions)(4));
+			w14.YOptions = ((global::Gtk.AttachOptions)(4));
+			this.hbox4.Add (this.table1);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.table1]));
+			w15.Position = 1;
+			w15.Expand = false;
+			this.Add (this.hbox4);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 613;
 			this.DefaultHeight = 410;
 			this.Show ();
-			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnKeyPressEvent);
 			this.button1.Clicked += new global::System.EventHandler (this.OnButton1Clicked);
 		}

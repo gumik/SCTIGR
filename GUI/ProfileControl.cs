@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using Pango;
 
 namespace SCTIGR
 {
@@ -13,6 +14,7 @@ namespace SCTIGR
 		{
 			this.Build ();
 			mutex = new object();
+			spaceLabel.ModifyFont(FontDescription.FromString("Monospace 10"));
 		}
 		
 		public Profile Profile
@@ -36,6 +38,14 @@ namespace SCTIGR
 						EmptyInserted(p); 
 					}
 				});
+			}
+		}
+		
+		public int EmptySpace
+		{
+			set 
+			{
+				spaceLabel.LabelProp = string.Concat(Enumerable.Repeat(' ', value));
 			}
 		}
 		

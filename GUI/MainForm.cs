@@ -6,12 +6,6 @@ namespace SCTIGR
 {
 	public partial class MainForm : Gtk.Window
 	{
-		protected virtual void OnDeleteEvent (object o, Gtk.DeleteEventArgs args)
-		{
-			Application.Quit();
-		}
-		
-		
 		public MainForm () : base(Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
@@ -28,7 +22,10 @@ namespace SCTIGR
 			var tigr = new Tigr(4, 1, 3, 0.9f, shots);
 			ProfileControl.Profile = tigr.Profile;
 			
-			tigr.AssemblyGoodAlignmentAdded += test;
+			tigr.AssemblyCandidate += tigr_AssemblyCandidate;
+			tigr.AssemblyCandidateScore += tigr_AssemblyCandidateScore;
+			tigr.AssemblyGoodAlignment += tigr_AssemblyGoodAlignment;
+			;
 			//Monitor.Enter(mutex);
 			
 			//tigr.Calculate();
@@ -58,7 +55,55 @@ namespace SCTIGR
 //		}
 		
 		private object mutex = new object();
-		private void test(Profile profile)
+		
+		private void tigr_AssemblyCandidate(string sequence, int begin)
+		{
+			Gtk.Application.Invoke(delegate { AssemblyCandidate(sequence, begin); });
+		}
+		
+		private void AssemblyCandidate(string sequence, int begin)
+		{
+			if (begin < 0)
+			{
+				profilecontrol1.EmptySpace = -begin;
+				sequencecontrol2.Text = sequence;
+			}
+			else
+			{
+				profilecontrol1.EmptySpace = 0;
+				sequencecontrol2.Text = Utils.RepeatChar(' ', begin) + sequence;
+			}
+		}
+		
+		private void tigr_AssemblyCandidateScore(int overlap, int overhang, float similarity)
+		{
+			Gtk.Application.Invoke(delegate { AssemblyCandidateScore(overlap, overhang, similarity); });
+			Lock();
+		}
+			
+		private void AssemblyCandidateScore(int overlap, int overhang, float similarity)
+		{
+			overlapLabel.LabelProp = overlap.ToString();
+			overhangLabel.LabelProp = overhang.ToString();
+			similarityLabel.LabelProp = similarity.ToString();
+		}
+		
+		private void tigr_AssemblyGoodAlignment()
+		{
+			Gtk.Application.Invoke(delegate { AssemblyGoodAlignment(); });
+			Lock();
+		}
+		
+		private void AssemblyGoodAlignment()
+		{
+			profilecontrol1.EmptySpace = 0;
+			sequencecontrol2.Text = "";
+			overlapLabel.LabelProp = "";
+			overhangLabel.LabelProp = "";
+			similarityLabel.LabelProp = "";
+		}
+		
+		private void Lock()
 		{
 			lock (mutex)
 			{

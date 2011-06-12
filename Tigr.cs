@@ -40,9 +40,10 @@ namespace SCTIGR
 		public event Action<HashSet<int>> PairwaiseComparisionExistingMer = delegate { };
 		
 		public event Action<string> AssemblyInit = delegate { };
-		public event Action<string> AssemblyCandidate = delegate { };
-		public event Action<int> AssemblyGoodAlignment = delegate { };
-		public event Action<Profile> AssemblyGoodAlignmentAdded = delegate { };
+		public event Action<string, int> AssemblyCandidate = delegate { };
+		public event Action<int, int, float> AssemblyCandidateScore = delegate { };
+		public event Action AssemblyGoodAlignment = delegate { };
+		//public event Action<Profile> AssemblyGoodAlignmentAdded = delegate { };
 		
 		#endregion
 		
@@ -116,15 +117,7 @@ namespace SCTIGR
 			var firstSegment = 0;
 			
 			AssemblyInit(sequences[0]);
-//			var queue = new Queue<int>();
-//			for (int i = 1; i < sequences.Length; ++i)
-//			{
-//				queue.Enqueue(i);
-//			}
 			
-//			while (queue.Count > 0)
-//			{
-			//var seq = queue.Dequeue();
 			int change = 0; // 0 - there was align, 1 - there wasn't align on last, 2 - there wasn't align at all
 			while (true)
 			{
@@ -164,13 +157,13 @@ namespace SCTIGR
 				var wasAlign = false;
 				foreach (var probSeq in list)
 				{
-					AssemblyCandidate(sequences[probSeq]);
 					var sm = new SmithWaterman(profile, sequences[probSeq]);
 					sm.Calculate();
 					var alignment = sm.GetBest();
+					AssemblyCandidate(sequences[probSeq], alignment.First.Value.Item1 - alignment.First.Value.Item2);
+					
 					if (IsGoodAlignment(sequences[probSeq], alignment))
-					{
-						AssemblyGoodAlignment(alignment.First.Value.Item1 - alignment.First.Value.Item2);
+					{						
 						var side = AddSequence(sequences[probSeq], alignment);
 						
 						if ((side & 1) != 0)
@@ -184,7 +177,8 @@ namespace SCTIGR
 						}
 						
 						RemoveSeq(probSeq);
-						AssemblyGoodAlignmentAdded(profile);
+						//AssemblyGoodAlignmentAdded(profile);
+						AssemblyGoodAlignment();
 						wasAlign = true;
 						break;
 					}
@@ -244,6 +238,8 @@ namespace SCTIGR
 			}
 			
 			var similarity = (float)sameBits / alignment.Count;
+			
+			AssemblyCandidateScore(overlap, overhang, similarity);
 			
 			return (similarity >= minSimilarity)
 				&& (overlap >= minOverlap)

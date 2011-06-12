@@ -17,7 +17,6 @@ namespace SCTIGR
 			tigr.AssemblyInit += AssemblyInit;
 			tigr.AssemblyCandidate += AssemblyCandidate;
 			tigr.AssemblyGoodAlignment += AssemblyGoodAlignment;
-			tigr.AssemblyGoodAlignmentAdded += AssemblyGoodAlignmentAdded;
 			tigr.Calculate();
 		}
 		
@@ -27,15 +26,15 @@ namespace SCTIGR
 			//Console.ReadKey();
 		}
 		
-		public static void AssemblyCandidate(string seq)
+		public static void AssemblyCandidate(string seq, int begin)
 		{
-			Console.WriteLine(string.Format("Candidate: {0}", seq));
+			Console.WriteLine(string.Format("Candidate: {0} ({1})", seq, begin));
 			//Console.ReadKey();
 		}
 		
-		public static void AssemblyGoodAlignment(int begin)
+		public static void AssemblyGoodAlignment()
 		{
-			Console.WriteLine(string.Format("AssemblyGoodAlignment: {0}", begin));
+			Console.WriteLine(string.Format("AssemblyGoodAlignment"));
 			//Console.ReadKey();
 		}
 		

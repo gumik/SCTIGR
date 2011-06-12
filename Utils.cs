@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Linq;
 
 namespace SCTIGR
 {
@@ -32,6 +33,11 @@ namespace SCTIGR
 			}
 			
 			return sb.ToString();
+		}
+		
+		public static string RepeatChar(char c, int num)
+		{
+			return string.Concat(Enumerable.Repeat(c, num));
 		}
 	}
 }
