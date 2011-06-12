@@ -207,7 +207,17 @@ namespace SCTIGR
 			{
 				if (element.Value > 0)
 				{
-					sortedList.Add(-element.Value - (float)(random.NextDouble() * 0.99), element.Key);
+					var ok = false;
+					while (!ok)
+					{
+						try
+						{
+							// Cóż za paskudna rzecz.
+							sortedList.Add(-element.Value - (float)(random.NextDouble() * 0.99), element.Key);
+							ok = true;
+						}
+						catch { }
+					}
 				}
 			}
 			

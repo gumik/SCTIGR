@@ -59,6 +59,7 @@ namespace SCTIGR
 				{
 					sequenceControl.Text += string.Concat(Enumerable.Repeat(' ', begin - sequenceControl.Text.Length));
 					sequenceControl.Text += text;
+					UpdateSequence();
 					return;
 				}
 				else if (sequence.Length + begin < sequenceControl.Text.Length - 2 
@@ -71,6 +72,7 @@ namespace SCTIGR
 					sb.Append(sequenceControl.Text.Substring(begin + sequence.Length));
 					
 					sequenceControl.Text = sb.ToString();
+					UpdateSequence();
 					return;
 				}
 			}
@@ -81,11 +83,14 @@ namespace SCTIGR
 			}
 			var sc = new SequenceControl() { Text = text, Visible = true };
 			vbox.Add(sc);
+			
+			UpdateSequence();
 		}
 		
 		private void EmptyInserted(int position)
 		{
 			InsertEmptyToAll(position, 1);
+			UpdateSequence();
 		}
 		
 		private void InsertEmptyToAll(int position, int length)
@@ -131,6 +136,18 @@ namespace SCTIGR
 			}
 			
 			return true;
+		}
+		
+		private void UpdateSequence()
+		{
+			var sb = new StringBuilder();
+			
+			for (int i = 0; i < profile.Length; ++i)
+			{
+				sb.Append(profile[i]);
+			}
+			
+			sequencecontrol1.Text = sb.ToString();
 		}
 		
 		private Profile profile;

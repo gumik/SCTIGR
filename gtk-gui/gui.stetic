@@ -23,22 +23,26 @@
           </widget>
           <packing>
             <property name="Position">0</property>
-            <property name="AutoSize">True</property>
+            <property name="AutoSize">False</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Alignment" id="alignment1">
+          <widget class="SCTIGR.SequenceControl" id="sequencecontrol1">
             <property name="MemberName" />
-            <property name="Xalign">1</property>
-            <property name="Yalign">1</property>
-            <child>
-              <placeholder />
-            </child>
+            <property name="Events">ButtonPressMask</property>
+            <property name="Text" />
           </widget>
           <packing>
             <property name="Position">1</property>
             <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
+        </child>
+        <child>
+          <placeholder />
         </child>
       </widget>
     </child>

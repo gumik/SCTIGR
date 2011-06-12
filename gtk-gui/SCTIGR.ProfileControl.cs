@@ -8,7 +8,7 @@ namespace SCTIGR
 
 		private global::Gtk.VBox vbox;
 
-		private global::Gtk.Alignment alignment1;
+		private global::SCTIGR.SequenceControl sequencecontrol1;
 
 		protected virtual void Build ()
 		{
@@ -26,12 +26,18 @@ namespace SCTIGR
 			this.vbox2.Add (this.vbox);
 			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.vbox]));
 			w1.Position = 0;
+			w1.Expand = false;
+			w1.Fill = false;
 			// Container child vbox2.Gtk.Box+BoxChild
-			this.alignment1 = new global::Gtk.Alignment (1f, 1f, 1f, 1f);
-			this.alignment1.Name = "alignment1";
-			this.vbox2.Add (this.alignment1);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.alignment1]));
+			this.sequencecontrol1 = new global::SCTIGR.SequenceControl ();
+			this.sequencecontrol1.Events = ((global::Gdk.EventMask)(256));
+			this.sequencecontrol1.Name = "sequencecontrol1";
+			this.sequencecontrol1.Text = "";
+			this.vbox2.Add (this.sequencecontrol1);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.sequencecontrol1]));
 			w2.Position = 1;
+			w2.Expand = false;
+			w2.Fill = false;
 			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

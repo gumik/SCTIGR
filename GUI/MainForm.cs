@@ -22,7 +22,7 @@ namespace SCTIGR
 			var sequence = Utils.RandomSequence(80);
 			Console.WriteLine(sequence);
 			
-			var shots = Utils.Shotgun(sequence, 160, 10, 2);
+			var shots = Utils.Shotgun(sequence, 20, 30, 5);
 			Console.WriteLine(string.Format("Shots ({0}):", shots.Length));
 			
 			var tigr = new Tigr(4, 1, 3, 0.9f, shots);
