@@ -82,7 +82,7 @@ namespace SCTIGR
 			{
 				var sequence = widget as SequenceControl;
 				if (sequence == null) continue;
-				if (sequence.Text.Length < position) continue;
+				if (sequence.Text.Length <= position) continue;
 				
 				if (position > 0 && sequence.Text[position - 1] != ' ')
 				{
