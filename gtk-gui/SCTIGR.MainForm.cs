@@ -4,13 +4,9 @@ namespace SCTIGR
 {
 	public partial class MainForm
 	{
-		private global::Gtk.VBox vbox2;
+		private global::Gtk.ScrolledWindow scrolledwindow2;
 
-		private global::SCTIGR.SequenceControl sequencecontrol1;
-
-		private global::Gtk.Alignment alignment1;
-
-		private global::SCTIGR.SequenceControl sequencecontrol2;
+		private global::SCTIGR.ProfileControl profilecontrol1;
 
 		protected virtual void Build ()
 		{
@@ -20,44 +16,28 @@ namespace SCTIGR
 			this.Title = global::Mono.Unix.Catalog.GetString ("MainForm");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Container child SCTIGR.MainForm.Gtk.Container+ContainerChild
-			this.vbox2 = new global::Gtk.VBox ();
-			this.vbox2.Name = "vbox2";
-			// Container child vbox2.Gtk.Box+BoxChild
-			this.sequencecontrol1 = new global::SCTIGR.SequenceControl ();
-			this.sequencecontrol1.Events = ((global::Gdk.EventMask)(256));
-			this.sequencecontrol1.Name = "sequencecontrol1";
-			this.sequencecontrol1.Text = "ACTG T G ACTG CG";
-			this.vbox2.Add (this.sequencecontrol1);
-			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.sequencecontrol1]));
-			w1.Position = 0;
-			w1.Expand = false;
-			w1.Fill = false;
-			// Container child vbox2.Gtk.Box+BoxChild
-			this.alignment1 = new global::Gtk.Alignment (0.5f, 0.5f, 1f, 1f);
-			this.alignment1.Name = "alignment1";
-			this.vbox2.Add (this.alignment1);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.alignment1]));
-			w2.PackType = ((global::Gtk.PackType)(1));
-			w2.Position = 1;
-			// Container child vbox2.Gtk.Box+BoxChild
-			this.sequencecontrol2 = new global::SCTIGR.SequenceControl ();
-			this.sequencecontrol2.Events = ((global::Gdk.EventMask)(256));
-			this.sequencecontrol2.Name = "sequencecontrol2";
-			this.sequencecontrol2.Text = "CATGGATCG CATG  CAT";
-			this.vbox2.Add (this.sequencecontrol2);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.sequencecontrol2]));
-			w3.PackType = ((global::Gtk.PackType)(1));
-			w3.Position = 2;
-			w3.Expand = false;
-			w3.Fill = false;
-			this.Add (this.vbox2);
+			this.scrolledwindow2 = new global::Gtk.ScrolledWindow ();
+			this.scrolledwindow2.CanFocus = true;
+			this.scrolledwindow2.Name = "scrolledwindow2";
+			this.scrolledwindow2.ShadowType = ((global::Gtk.ShadowType)(1));
+			// Container child scrolledwindow2.Gtk.Container+ContainerChild
+			global::Gtk.Viewport w1 = new global::Gtk.Viewport ();
+			w1.ShadowType = ((global::Gtk.ShadowType)(0));
+			// Container child GtkViewport.Gtk.Container+ContainerChild
+			this.profilecontrol1 = new global::SCTIGR.ProfileControl ();
+			this.profilecontrol1.Events = ((global::Gdk.EventMask)(256));
+			this.profilecontrol1.Name = "profilecontrol1";
+			w1.Add (this.profilecontrol1);
+			this.scrolledwindow2.Add (w1);
+			this.Add (this.scrolledwindow2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 400;
-			this.DefaultHeight = 300;
+			this.DefaultWidth = 613;
+			this.DefaultHeight = 410;
 			this.Show ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+			this.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnKeyPressEvent);
 		}
 	}
 }

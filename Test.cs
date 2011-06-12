@@ -110,7 +110,18 @@ namespace SCTIGR
 		{
 			Application.Init();
 			
-			new MainForm().Visible = true;
+//			var profile = new Profile();
+			
+			var mainForm = new MainForm();
+			mainForm.Visible = true;
+			//mainForm.ProfileControl.Profile = tigr.Profile;
+			
+			//profile.AddSequence("ACTG", 0);
+			
+			
+			//tigr.Calculate();
+			
+			
 			
 			Application.Run();
 		}

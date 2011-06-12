@@ -13,6 +13,8 @@ namespace SCTIGR
 		
 		public void AddSequence(string sequence, int begin)
 		{
+			SequenceAdded(sequence, begin);
+			
 			if (begin < 0) // at the beggining
 			{
 				profile.InsertRange(0, NewEmptyFragment(-begin));
@@ -30,11 +32,13 @@ namespace SCTIGR
 				profile[begin][CharToKey(c)]++;
 				++begin;
 			}
+			
 		}
 		
 		public void InsertEmpty(int position)
 		{
 			profile.InsertRange(position, NewEmptyFragment(1));
+			EmptyInserted(position);
 		}
 		
 		public float Score(int index, char c, float matchScore, float mismatchScore)
@@ -92,6 +96,9 @@ namespace SCTIGR
 		}
 		
 		public int Length { get { return profile.Count; } }
+		
+		public event Action<string, int> SequenceAdded = delegate { };
+		public event Action<int> EmptyInserted = delegate { };
 		
 		private int CharToKey(char c)
 		{

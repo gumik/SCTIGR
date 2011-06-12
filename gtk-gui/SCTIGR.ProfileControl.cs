@@ -4,12 +4,18 @@ namespace SCTIGR
 {
 	public partial class ProfileControl
 	{
+		private global::Gtk.VBox vbox;
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
 			// Widget SCTIGR.ProfileControl
 			global::Stetic.BinContainer.Attach (this);
 			this.Name = "SCTIGR.ProfileControl";
+			// Container child SCTIGR.ProfileControl.Gtk.Container+ContainerChild
+			this.vbox = new global::Gtk.VBox ();
+			this.vbox.Name = "vbox";
+			this.Add (this.vbox);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}

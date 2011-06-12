@@ -14,6 +14,7 @@ namespace SCTIGR
 			this.maxOverhang = maxOverhang;
 			this.minOverlap = minOverlap;
 			this.minSimilarity = minSimilarity;
+			profile = new Profile();
 		}
 		
 		public void Calculate()
@@ -25,6 +26,10 @@ namespace SCTIGR
 		#endregion
 		
 		#region public properties
+		
+		public Profile Profile { get { return profile; } }
+		
+		#endregion
 		
 		#region public events
 		
@@ -38,8 +43,6 @@ namespace SCTIGR
 		public event Action<string> AssemblyCandidate = delegate { };
 		public event Action<int> AssemblyGoodAlignment = delegate { };
 		public event Action<Profile> AssemblyGoodAlignmentAdded = delegate { };
-		
-		#endregion
 		
 		#endregion
 		
@@ -107,7 +110,6 @@ namespace SCTIGR
 		
 		private void Assembly()
 		{
-			profile = new Profile();
 			profile.AddSequence(sequences[0], 0);
 			
 			var lastSegment = 0;
