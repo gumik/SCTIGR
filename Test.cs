@@ -1,5 +1,6 @@
 using System;
 using Gtk;
+using System.Text;
 using System.IO;
 
 namespace SCTIGR
@@ -19,6 +20,37 @@ namespace SCTIGR
 			tigr.AssemblyCandidate += AssemblyCandidate;
 			tigr.AssemblyGoodAlignment += AssemblyGoodAlignment;
 			tigr.Calculate();
+		}
+		
+		public static void Shotgun()
+		{
+			var sequence = Utils.RandomSequence(80);
+			Console.WriteLine(sequence);
+			
+			var shots = Utils.Shotgun(sequence, 80, 10, 3);
+			
+			var r = new Random();
+			var t = new [] { 'A', 'T', 'C', 'G' };
+			foreach (var shot in shots)
+			{
+				var sb = new StringBuilder();
+				foreach (var l in shot)
+				{
+					if (r.NextDouble() < 0.1)
+					{
+						sb.Append(t[r.Next(4)]);
+					}
+					else 
+					{
+						sb.Append(l);
+					}
+				}
+				
+				Console.WriteLine(">");
+				Console.WriteLine(sb.ToString());
+			}
+			
+			
 		}
 		
 		public static void AssemblyInit(string seq)

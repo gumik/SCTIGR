@@ -4,6 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using Pango;
+using Gtk;
 
 namespace SCTIGR
 {
@@ -16,6 +17,16 @@ namespace SCTIGR
 			mutex = new object();
 			spaceLabel1.ModifyFont(FontDescription.FromString("Monospace 10"));
 			spaceLabel2.ModifyFont(FontDescription.FromString("Monospace 10"));
+		}
+		
+		public void Clear() 
+		{
+			EmptySpace = 0;
+			sequencecontrol1.Text = "";
+			foreach (var control in vbox.Children.Clone() as Widget[])
+			{
+				control.Destroy();
+			}
 		}
 		
 		public Profile Profile

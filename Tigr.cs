@@ -43,6 +43,7 @@ namespace SCTIGR
 		public event Action<string, int> AssemblyCandidate = delegate { };
 		public event Action<int, int, float> AssemblyCandidateScore = delegate { };
 		public event Action AssemblyGoodAlignment = delegate { };
+		public event Action AssemblyEnd = delegate { };
 		//public event Action<Profile> AssemblyGoodAlignmentAdded = delegate { };
 		
 		#endregion
@@ -189,6 +190,8 @@ namespace SCTIGR
 					change++;
 				}
 			}
+			
+			AssemblyEnd();
 		}
 		
 		private IList<int> GetProbablyBest(int baseSeq)

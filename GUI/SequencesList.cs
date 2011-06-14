@@ -25,6 +25,25 @@ namespace SCTIGR
 				vbox.Add(sequenceControl);
 			}
 		}
+		
+		public void Remove(string sequence)
+		{
+			SequenceControl toRemove = null;
+			foreach (var control in vbox.Children)
+			{
+				var sequenceControl = control as SequenceControl;
+				if (sequenceControl.Text == sequence)
+				{
+					toRemove = sequenceControl;
+					break;
+				}
+			}
+			
+			if (toRemove != null)
+			{
+				toRemove.Destroy();
+			}
+		}
 	}
 }
 

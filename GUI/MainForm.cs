@@ -14,37 +14,41 @@ namespace SCTIGR
 		
 		#region gui events
 		
-		protected virtual void OnKeyPressEvent (object o, Gtk.KeyPressEventArgs args)
-		{
-			var sequence = Utils.RandomSequence(80);
-			Console.WriteLine(sequence);
-			
-			var shots = Utils.Shotgun(sequence, 20, 30, 5);
-			Console.WriteLine(string.Format("Shots ({0}):", shots.Length));
-			
-			var tigr = new Tigr(4, 1, 3, 0.9f, shots);
-			profilecontrol1.Profile = tigr.Profile;
-			
-			tigr.AssemblyCandidate += tigr_AssemblyCandidate;
-			tigr.AssemblyCandidateScore += tigr_AssemblyCandidateScore;
-			tigr.AssemblyGoodAlignment += tigr_AssemblyGoodAlignment;
-
-			tigrThread = new Thread(new ThreadStart(tigr.Calculate));
-			tigrThread.Start();
-		}
-		
 		protected virtual void OnButton1Clicked (object sender, System.EventArgs e)
 		{
-			try
+			if (isStarted)
 			{
-				lock (mutex)
+				try
 				{
-					Monitor.PulseAll(mutex);
+					lock (mutex)
+					{
+						Monitor.PulseAll(mutex);
+					}
 				}
-			} 
-			catch (Exception ex)
+				catch { }
+			}
+			else 
 			{
-				Console.WriteLine(ex);
+				isStarted = true;
+				button1.Label = "Dalej";
+				
+				var tigr = new Tigr
+					(
+					 (int)merSpin.Value, 
+					 (int)overhangSpin.Value, 
+					 (int)overlapSpin.Value, 
+					 (float)similaritySpin.Value, 
+					 sequences
+					);
+				profilecontrol1.Profile = tigr.Profile;
+				
+				tigr.AssemblyCandidate += tigr_AssemblyCandidate;
+				tigr.AssemblyCandidateScore += tigr_AssemblyCandidateScore;
+				tigr.AssemblyGoodAlignment += tigr_AssemblyGoodAlignment;
+				tigr.AssemblyEnd += tigr_AssemblyEnd;
+	
+				tigrThread = new Thread(new ThreadStart(tigr.Calculate));
+				tigrThread.Start();
 			}
 		}
 		
@@ -80,36 +84,23 @@ namespace SCTIGR
 			fileOpenDialog.Destroy();
 			if (responseType == (int)ResponseType.Accept)
 			{
-				try 
-				{
-					var fileReader = new StreamReader(new FileStream(filename, FileMode.Open));
-					var sequences = Utils.ReadFasta(fileReader);
-					fileReader.Close();
-					sequencesList.SetSequences(sequences);
-				}
-				catch
-				{
-					var md = new MessageDialog
-						(
-						 this, 
-                         DialogFlags.DestroyWithParent,
-	                     MessageType.Error, 
-                         ButtonsType.Close, 
-						 "Błędny format pliku."
-						);
-					md.Title = "Błąd";
-					md.Run();
-					md.Destroy();
-				}
+				
+				var fileReader = new StreamReader(new FileStream(filename, FileMode.Open));
+				ReadSequences(fileReader);
+				fileReader.Close();
 			}
 		}
 		
 		protected virtual void OnWprowadActionActivated (object sender, System.EventArgs e)
 		{
-			slf = new SequenceLoadForm();
-			//slf.Modal = true;
-			//slf.Show();
-			slf.Visible = true;
+			vbox7.Visible = true;
+			hpaned1.Visible = false;
+		}
+		
+		protected virtual void OnButton4Activated (object sender, System.EventArgs e)
+		{
+			vbox7.Visible = false;
+			hpaned1.Visible = false;
 		}
 		
 		#endregion
@@ -133,6 +124,8 @@ namespace SCTIGR
 				profilecontrol1.EmptySpace = 0;
 				sequencecontrol2.Text = Utils.RepeatChar(' ', begin) + sequence;
 			}
+			
+			this.sequence = sequence;
 		}
 		
 		private void tigr_AssemblyCandidateScore(int overlap, int overhang, float similarity)
@@ -146,6 +139,7 @@ namespace SCTIGR
 			overlapLabel.LabelProp = overlap.ToString();
 			overhangLabel.LabelProp = overhang.ToString();
 			similarityLabel.LabelProp = similarity.ToString();
+			table1.Visible = true;
 		}
 		
 		private void tigr_AssemblyGoodAlignment()
@@ -158,9 +152,23 @@ namespace SCTIGR
 		{
 			profilecontrol1.EmptySpace = 0;
 			sequencecontrol2.Text = "";
-			overlapLabel.LabelProp = "";
-			overhangLabel.LabelProp = "";
-			similarityLabel.LabelProp = "";
+			table1.Visible = false;
+			sequencesList.Remove(sequence);
+		}
+		
+		private void tigr_AssemblyEnd() 
+		{
+			Gtk.Application.Invoke(delegate { AssemblyEnd(); });
+		}
+		
+		private void AssemblyEnd()
+		{
+			var mb = new MessageDialog(this, DialogFlags.Modal, MessageType.Info, ButtonsType.Ok, "Algorytm zakończony");
+			mb.Run();
+			mb.Destroy();
+			isStarted = false;
+			button1.Label = "Start";
+			button1.Sensitive = false;
 		}
 		
 		#endregion
@@ -173,12 +181,46 @@ namespace SCTIGR
 			}
 		}
 		
+		private bool ReadSequences(TextReader reader) 
+		{
+			try 
+			{
+				sequences = Utils.ReadFasta(reader);
+				sequencesList.SetSequences(sequences);
+				button1.Sensitive = true;
+				button1.Label = "Start";
+				profilecontrol1.Clear();
+				table1.Visible = false;
+				sequencecontrol2.Text = "";
+				return true;
+			}
+			catch
+			{
+				var md = new MessageDialog
+					(
+					 this, 
+                     DialogFlags.DestroyWithParent,
+                     MessageType.Error, 
+                     ButtonsType.Close, 
+					 "Błędny format pliku."
+					);
+				md.Title = "Błąd";
+				md.Run();
+				md.Destroy();
+				return false;
+			}
+		}
+		
 		
 		
 		private Thread tigrThread;
 		private object mutex = new object();
 		private string lastFolder;
 		private SequenceLoadForm slf;
+		private bool isStarted;
+		private string[] sequences;
+		private string sequence;
+		//private SequencesInput sequencesInput;
 	}
 }
 

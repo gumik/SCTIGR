@@ -33,11 +33,15 @@ namespace SCTIGR
 		}
 		
 		public string[] Sequences { get; private set; }
+		public event EventHandler ButtonPressed
+		{
+			add { button1.Activated += value; }
+			remove { button1.Activated -= value; }
+		}
 		
 		public SequenceLoadForm () : base(Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
-			button1.Activated += (a, b) => Console.WriteLine("dasdf");
 		}
 	}
 }

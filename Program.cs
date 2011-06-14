@@ -1,4 +1,6 @@
 using System;
+using Gtk;
+
 namespace SCTIGR
 {
 	public class Program
@@ -10,8 +12,13 @@ namespace SCTIGR
 			//Test.ProfileTest();
 			//Test.SM();
 			
-			Test.Gui();
+			//Test.Gui();
 			//Test.Fasta();
+			//Test.Shotgun();
+			Application.Init();
+			var form = new MainForm();
+			form.Visible = true;
+			Application.Run();
 		}
 	}
 }
