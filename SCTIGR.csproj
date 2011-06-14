@@ -46,6 +46,10 @@
     <Compile Include="gtk-gui\SCTIGR.SequenceControl.cs" />
     <Compile Include="GUI\MainForm.cs" />
     <Compile Include="gtk-gui\SCTIGR.MainForm.cs" />
+    <Compile Include="GUI\SequencesList.cs" />
+    <Compile Include="gtk-gui\SCTIGR.SequencesList.cs" />
+    <Compile Include="GUI\SequenceLoadForm.cs" />
+    <Compile Include="gtk-gui\SCTIGR.SequenceLoadForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

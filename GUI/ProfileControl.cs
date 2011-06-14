@@ -14,7 +14,8 @@ namespace SCTIGR
 		{
 			this.Build ();
 			mutex = new object();
-			spaceLabel.ModifyFont(FontDescription.FromString("Monospace 10"));
+			spaceLabel1.ModifyFont(FontDescription.FromString("Monospace 10"));
+			spaceLabel2.ModifyFont(FontDescription.FromString("Monospace 10"));
 		}
 		
 		public Profile Profile
@@ -45,7 +46,8 @@ namespace SCTIGR
 		{
 			set 
 			{
-				spaceLabel.LabelProp = string.Concat(Enumerable.Repeat(' ', value));
+				spaceLabel1.LabelProp = string.Concat(Enumerable.Repeat(' ', value));
+				spaceLabel2.LabelProp = string.Concat(Enumerable.Repeat(' ', value));
 			}
 		}
 		

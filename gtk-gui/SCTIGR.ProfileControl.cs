@@ -4,13 +4,19 @@ namespace SCTIGR
 {
 	public partial class ProfileControl
 	{
-		private global::Gtk.HBox hbox6;
-
-		private global::Gtk.Label spaceLabel;
-
 		private global::Gtk.VBox vbox2;
 
+		private global::Gtk.HBox hbox3;
+
+		private global::Gtk.Label spaceLabel1;
+
 		private global::Gtk.VBox vbox;
+
+		private global::Gtk.HSeparator hseparator1;
+
+		private global::Gtk.HBox hbox2;
+
+		private global::Gtk.Label spaceLabel2;
 
 		private global::SCTIGR.SequenceControl sequencecontrol1;
 
@@ -21,42 +27,66 @@ namespace SCTIGR
 			global::Stetic.BinContainer.Attach (this);
 			this.Name = "SCTIGR.ProfileControl";
 			// Container child SCTIGR.ProfileControl.Gtk.Container+ContainerChild
-			this.hbox6 = new global::Gtk.HBox ();
-			this.hbox6.Name = "hbox6";
-			// Container child hbox6.Gtk.Box+BoxChild
-			this.spaceLabel = new global::Gtk.Label ();
-			this.spaceLabel.Name = "spaceLabel";
-			this.hbox6.Add (this.spaceLabel);
-			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox6[this.spaceLabel]));
-			w1.Position = 0;
-			w1.Expand = false;
-			w1.Fill = false;
-			// Container child hbox6.Gtk.Box+BoxChild
 			this.vbox2 = new global::Gtk.VBox ();
 			this.vbox2.Name = "vbox2";
 			this.vbox2.Spacing = 6;
 			// Container child vbox2.Gtk.Box+BoxChild
+			this.hbox3 = new global::Gtk.HBox ();
+			this.hbox3.Name = "hbox3";
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.spaceLabel1 = new global::Gtk.Label ();
+			this.spaceLabel1.Name = "spaceLabel1";
+			this.hbox3.Add (this.spaceLabel1);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox3[this.spaceLabel1]));
+			w1.Position = 0;
+			w1.Expand = false;
+			w1.Fill = false;
+			// Container child hbox3.Gtk.Box+BoxChild
 			this.vbox = new global::Gtk.VBox ();
 			this.vbox.Name = "vbox";
-			this.vbox2.Add (this.vbox);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.vbox]));
-			w2.Position = 0;
-			w2.Expand = false;
-			w2.Fill = false;
+			this.hbox3.Add (this.vbox);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox3[this.vbox]));
+			w2.Position = 1;
+			this.vbox2.Add (this.hbox3);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox3]));
+			w3.Position = 0;
+			w3.Expand = false;
+			w3.Fill = false;
 			// Container child vbox2.Gtk.Box+BoxChild
+			this.hseparator1 = new global::Gtk.HSeparator ();
+			this.hseparator1.Name = "hseparator1";
+			this.vbox2.Add (this.hseparator1);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hseparator1]));
+			w4.Position = 1;
+			w4.Expand = false;
+			w4.Fill = false;
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2.Name = "hbox2";
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.spaceLabel2 = new global::Gtk.Label ();
+			this.spaceLabel2.Name = "spaceLabel2";
+			this.hbox2.Add (this.spaceLabel2);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.spaceLabel2]));
+			w5.Position = 0;
+			w5.Expand = false;
+			w5.Fill = false;
+			// Container child hbox2.Gtk.Box+BoxChild
 			this.sequencecontrol1 = new global::SCTIGR.SequenceControl ();
 			this.sequencecontrol1.Events = ((global::Gdk.EventMask)(256));
 			this.sequencecontrol1.Name = "sequencecontrol1";
 			this.sequencecontrol1.Text = "";
-			this.vbox2.Add (this.sequencecontrol1);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.sequencecontrol1]));
-			w3.Position = 1;
-			w3.Expand = false;
-			w3.Fill = false;
-			this.hbox6.Add (this.vbox2);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox6[this.vbox2]));
-			w4.Position = 1;
-			this.Add (this.hbox6);
+			this.hbox2.Add (this.sequencecontrol1);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.sequencecontrol1]));
+			w6.Position = 1;
+			w6.Expand = false;
+			w6.Fill = false;
+			this.vbox2.Add (this.hbox2);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox2]));
+			w7.Position = 2;
+			w7.Expand = false;
+			w7.Fill = false;
+			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}

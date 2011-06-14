@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Gtk;
+using System.IO;
 
 namespace SCTIGR
 {
@@ -11,6 +12,8 @@ namespace SCTIGR
 			this.Build ();
 		}
 		
+		#region gui events
+		
 		protected virtual void OnKeyPressEvent (object o, Gtk.KeyPressEventArgs args)
 		{
 			var sequence = Utils.RandomSequence(80);
@@ -20,41 +23,98 @@ namespace SCTIGR
 			Console.WriteLine(string.Format("Shots ({0}):", shots.Length));
 			
 			var tigr = new Tigr(4, 1, 3, 0.9f, shots);
-			ProfileControl.Profile = tigr.Profile;
+			profilecontrol1.Profile = tigr.Profile;
 			
 			tigr.AssemblyCandidate += tigr_AssemblyCandidate;
 			tigr.AssemblyCandidateScore += tigr_AssemblyCandidateScore;
 			tigr.AssemblyGoodAlignment += tigr_AssemblyGoodAlignment;
-			;
-			//Monitor.Enter(mutex);
-			
-			//tigr.Calculate();
-			new Thread(new ThreadStart(tigr.Calculate)).Start();
+
+			tigrThread = new Thread(new ThreadStart(tigr.Calculate));
+			tigrThread.Start();
 		}
 		
-//		protected virtual void OnKeyPressEvent (object o, Gtk.KeyPressEventArgs args)
-//		{
-//			var shots = new []
-//			{
-//				"ATTTTTTT",
-//				"TTGTTTAGGCA"
-//			};
-//			
-//			//var tigr = new Tigr(4, 1, 3, 0.8f, shots);
-//			var profile = new Profile();
-//			ProfileControl.Profile = profile;
-//			
-//			profile.AddSequence("ATGCCATG", 0);
-//			profile.AddSequence("GCCATG", 2);
-//			profile.AddSequence("CCACTGATGC", -6);
-//			profile.InsertEmpty(9);
-//			
-//			//tigr.AssemblyGoodAlignmentAdded += test;
-//			
-//			//tigr.Calculate();
-//		}
+		protected virtual void OnButton1Clicked (object sender, System.EventArgs e)
+		{
+			try
+			{
+				lock (mutex)
+				{
+					Monitor.PulseAll(mutex);
+				}
+			} 
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+		}
 		
-		private object mutex = new object();
+		protected virtual void OnDeleteEvent (object o, Gtk.DeleteEventArgs args)
+		{
+			Application.Quit();
+			try 
+			{
+				tigrThread.Abort();
+			}
+			catch { }
+		}
+		
+		protected virtual void OnOpenActionActivated (object sender, System.EventArgs e)
+		{
+			var fileOpenDialog = new FileChooserDialog
+				(
+				 "Wybierz plik...", 
+				 this, 
+				 FileChooserAction.Open, 
+				 "Otwórz", ResponseType.Accept,
+				 "Anuluj", ResponseType.Cancel
+				);
+			
+			if (lastFolder != null)
+			{
+				fileOpenDialog.SetCurrentFolder(lastFolder);
+			}
+			
+			var responseType = fileOpenDialog.Run();
+			var filename = fileOpenDialog.Filename;
+			lastFolder = fileOpenDialog.CurrentFolder;
+			fileOpenDialog.Destroy();
+			if (responseType == (int)ResponseType.Accept)
+			{
+				try 
+				{
+					var fileReader = new StreamReader(new FileStream(filename, FileMode.Open));
+					var sequences = Utils.ReadFasta(fileReader);
+					fileReader.Close();
+					sequencesList.SetSequences(sequences);
+				}
+				catch
+				{
+					var md = new MessageDialog
+						(
+						 this, 
+                         DialogFlags.DestroyWithParent,
+	                     MessageType.Error, 
+                         ButtonsType.Close, 
+						 "Błędny format pliku."
+						);
+					md.Title = "Błąd";
+					md.Run();
+					md.Destroy();
+				}
+			}
+		}
+		
+		protected virtual void OnWprowadActionActivated (object sender, System.EventArgs e)
+		{
+			slf = new SequenceLoadForm();
+			//slf.Modal = true;
+			//slf.Show();
+			slf.Visible = true;
+		}
+		
+		#endregion
+		
+		#region tigr event handlers
 		
 		private void tigr_AssemblyCandidate(string sequence, int begin)
 		{
@@ -103,6 +163,8 @@ namespace SCTIGR
 			similarityLabel.LabelProp = "";
 		}
 		
+		#endregion
+		
 		private void Lock()
 		{
 			lock (mutex)
@@ -111,27 +173,12 @@ namespace SCTIGR
 			}
 		}
 		
-		protected virtual void OnButton1Clicked (object sender, System.EventArgs e)
-		{
-			try
-			{
-				lock (mutex)
-				{
-					Monitor.PulseAll(mutex);
-				}
-			} 
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex);
-			}
-		}
 		
 		
-		
-		public ProfileControl ProfileControl
-		{
-			get { return profilecontrol1; }
-		}
+		private Thread tigrThread;
+		private object mutex = new object();
+		private string lastFolder;
+		private SequenceLoadForm slf;
 	}
 }
 
