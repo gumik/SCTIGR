@@ -10,7 +10,8 @@ namespace SCTIGR
 			//Test.ProfileTest();
 			//Test.SM();
 			
-			Test.Gui();
+			//Test.Gui();
+			Test.Fasta();
 		}
 	}
 }

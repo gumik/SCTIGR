@@ -1,5 +1,6 @@
 using System;
 using Gtk;
+using System.IO;
 
 namespace SCTIGR
 {
@@ -123,6 +124,46 @@ namespace SCTIGR
 			
 			
 			Application.Run();
+		}
+		
+		public static void Fasta() 
+		{
+			var sequences = 
+@">1
+ACGTAACTGTCATCGATCGTCG
+CATGATGCATGCATGCATGCATG
+CATGCAGTATGCAGTATGCATG
+
+>2
+ATGC
+
+>3
+ATTTTTA
+
+
+>4
+A
+C
+T
+
+G
+";
+			
+			string[] array = null;
+			try
+			{
+				array = Utils.ReadFasta(new StringReader(sequences));
+			}
+			catch
+			{
+				Console.WriteLine("error");
+				return;
+			}
+			
+			foreach (var s in array)
+			{
+				Console.WriteLine(string.Format(">{0}<", s));
+			}
 		}
 	}
 }
